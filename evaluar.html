@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://script.google.com https://script.googleusercontent.com; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Panel de evaluación</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="logo" data-inicial aria-hidden="true"></div>
+    <div class="marca"><span data-marca></span><small>Panel de evaluación</small></div>
+  </header>
+
+  <main>
+    <div id="cargando" class="cargando"><div class="spinner"></div> Cargando…</div>
+    <div id="error-general" class="card" hidden>
+      <h1>No pudimos abrir el panel</h1>
+      <p class="msg err" id="error-general-texto"></p>
+      <p class="hint">Usa el enlace personal que te llegó por email. Si el problema sigue, avísale a la organización.</p>
+    </div>
+
+    <section id="vista-lista" hidden>
+      <div class="cabecera">
+        <div>
+          <div class="etiqueta" id="saludo"></div>
+          <h1 id="congreso"></h1>
+        </div>
+        <div class="avance">
+          <span id="avance-texto"></span>
+          <div class="barra"><div id="avance-barra"></div></div>
+        </div>
+      </div>
+      <div id="avisos"></div>
+      <div id="lista" class="lista"></div>
+    </section>
+
+    <section id="vista-detalle" hidden>
+      <button class="enlace-btn volver" id="volver" type="button">&larr; Volver a la lista</button>
+      <div class="card">
+        <div class="etiqueta" id="d-codigo"></div>
+        <h2 id="d-titulo"></h2>
+        <p class="sub" id="d-meta"></p>
+        <div class="vista" id="d-vista"></div>
+        <div class="original" id="d-original"></div>
+
+        <form id="form" novalidate>
+          <div id="criterios"></div>
+          <div class="campo">
+            <label for="comentario">Comentario <span class="hint">(opcional)</span></label>
+            <textarea id="comentario" maxlength="2000"></textarea>
+          </div>
+          <div class="msg err" id="d-error" role="alert" hidden></div>
+          <button type="submit" class="btn bloque" id="guardar">Guardar evaluación</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">Este enlace es personal. No lo compartas.</footer>
+
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="evaluar.js"></script>
+</body>
+</html>
