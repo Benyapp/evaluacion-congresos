@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://script.google.com https://script.googleusercontent.com; img-src 'self' data:; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
-  <title>Envío de anuncios</title>
+  <title>Envío de artículos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 <body>
   <header class="top">
     <div class="logo" data-inicial aria-hidden="true"></div>
-    <div class="marca"><span data-marca></span><small>Envío de anuncios</small></div>
+    <div class="marca"><span data-marca></span><small>Envío de artículos</small></div>
   </header>
 
   <main class="angosto">
@@ -29,7 +29,7 @@
       <form id="form" hidden novalidate>
         <div class="etiqueta" id="congreso-codigo"></div>
         <h1 id="congreso-nombre"></h1>
-        <p class="sub">Completa tus datos y sube el archivo de tu anuncio. Recibirás una confirmación por email.</p>
+        <p class="sub">Completa tus datos y sube el archivo de tu artículo. Recibirás una confirmación por email.</p>
 
         <div class="campo">
           <label for="nombre">Nombre o empresa</label>
@@ -40,7 +40,7 @@
           <input type="email" id="email" maxlength="160" required autocomplete="email" inputmode="email">
         </div>
         <div class="campo">
-          <label for="titulo">Título del anuncio</label>
+          <label for="titulo">Título del artículo</label>
           <input type="text" id="titulo" maxlength="200" required>
         </div>
 
@@ -51,7 +51,7 @@
         </div>
 
         <div class="campo">
-          <span class="label" id="archivo-label">Archivo del anuncio</span>
+          <span class="label" id="archivo-label">Archivo del artículo</span>
           <div class="zona" id="zona">
             <input type="file" id="archivo" aria-labelledby="archivo-label" required>
             <svg class="icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -64,7 +64,7 @@
           </div>
         </div>
 
-        <button class="btn bloque" type="submit" id="enviar">Enviar anuncio</button>
+        <button class="btn bloque" type="submit" id="enviar">Enviar artículo</button>
 
         <div class="progreso" id="progreso" hidden>
           <div class="barra"><div id="barra"></div></div>
@@ -77,11 +77,11 @@
         <div class="check" aria-hidden="true">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
         </div>
-        <h1>¡Anuncio recibido!</h1>
+        <h1>¡Artículo recibido!</h1>
         <p class="sub">Tu código de envío es</p>
         <div class="codigo" id="codigo"></div>
         <p class="sub">Te enviamos una confirmación a <b id="exito-email"></b>.<br>Guarda este código para cualquier consulta.</p>
-        <button class="btn sec" type="button" id="otro">Enviar otro anuncio</button>
+        <button class="btn sec" type="button" id="otro">Enviar otro artículo</button>
       </div>
     </div>
   </main>

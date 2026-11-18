@@ -55,7 +55,7 @@
     } catch (e) {
       return errorInicial(e.message);
     }
-    document.title = 'Envío de anuncios – ' + CONFIG.nombre;
+    document.title = 'Envío de artículos – ' + CONFIG.nombre;
     $('congreso-codigo').textContent = CONFIG.codigo;
     $('congreso-nombre').textContent = CONFIG.nombre;
     $('formatos').textContent = CONFIG.formatos.join(', ').toUpperCase() + ' · máximo ' + CONFIG.maxMB + ' MB';
@@ -87,8 +87,8 @@
     };
     if (!datos.nombre) return mostrarError('Escribe tu nombre o el de tu empresa.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.email)) return mostrarError('Revisa tu email.');
-    if (!datos.titulo) return mostrarError('Escribe el título del anuncio.');
-    if (!archivo) return mostrarError('Elige el archivo de tu anuncio.');
+    if (!datos.titulo) return mostrarError('Escribe el título del artículo.');
+    if (!archivo) return mostrarError('Elige el archivo de tu artículo.');
     datos.archivoNombre = archivo.name;
     datos.tamano = archivo.size;
 

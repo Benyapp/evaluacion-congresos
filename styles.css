@@ -166,7 +166,9 @@ textarea { min-height: 96px; resize: vertical; }
 }
 .vista img { max-width: 100%; max-height: 72vh; display: block; }
 .vista .vacia { color: var(--muted); padding: 28px; text-align: center; font-size: .92rem; }
-.original { font-size: .9rem; }
+.original { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: .95rem; }
+.vista.con-lector { min-height: 0; background: transparent; }
+.lector { width: 100%; height: 78vh; border: 0; display: block; background: #fff; }
 .criterio { border-top: 1px solid var(--line); padding: 18px 0 4px; margin-top: 18px; }
 .criterio .nom { font-weight: 600; }
 .criterio .peso { font-size: .8rem; color: var(--muted); font-weight: 500; margin-left: 6px; }

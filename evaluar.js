@@ -25,9 +25,13 @@
     try { datos = await api('panel', { clave: CLAVE }); } catch (e) { return errorGeneral(e.message); }
 
     document.title = 'Evaluación – ' + datos.congreso.nombre;
-    $('congreso').textContent = datos.congreso.nombre;
-    $('saludo').textContent = 'Hola, ' + datos.evaluador;
     var hechos = datos.envios.filter(function (x) { return x.nota !== null; }).length;
+    var pendientes = datos.envios.length - hechos;
+    $('saludo').textContent = 'Congreso';
+    $('congreso').textContent = datos.congreso.nombre;
+    $('bienvenida').textContent = 'Hola, ' + datos.evaluador + '. ' +
+      (pendientes ? 'Tienes ' + pendientes + (pendientes === 1 ? ' artículo' : ' artículos') + ' por evaluar.'
+                  : 'No tienes artículos pendientes.');
     $('avance-texto').textContent = 'Evaluaste ' + hechos + ' de ' + datos.envios.length;
     $('avance-barra').style.width = (datos.envios.length ? hechos / datos.envios.length * 100 : 0) + '%';
 
@@ -42,7 +46,7 @@
 
     var lista = $('lista');
     lista.innerHTML = '';
-    if (!datos.envios.length) lista.appendChild(el('div', { class: 'card', text: 'Aún no hay anuncios para evaluar.' }));
+    if (!datos.envios.length) lista.appendChild(el('div', { class: 'card', text: 'Aún no hay artículos para evaluar.' }));
     datos.envios.forEach(function (x) {
       var meta = [x.autor, x.fecha].filter(String).join(' · ');
       var b = el('button', { class: 'item', type: 'button' }, [
@@ -78,9 +82,19 @@
 
     var orig = $('d-original');
     orig.innerHTML = '';
-    orig.appendChild(actual.archivoUrl
-      ? el('a', { href: actual.archivoUrl, target: '_blank', rel: 'noopener noreferrer', text: 'Abrir archivo original en Google Drive ↗' })
-      : el('span', { class: 'hint', text: 'Para abrir el archivo original necesitas acceso en Google Drive. Pídeselo a la organización.' }));
+    var esPdf = actual.formato === 'PDF';
+    if (actual.descargable) {
+      var leer = el('button', { class: 'btn', type: 'button', text: esPdf ? 'Leer artículo completo' : 'Descargar artículo (' + actual.formato + ')' });
+      leer.addEventListener('click', function () { abrirArchivo(leer, esPdf); });
+      orig.appendChild(leer);
+    }
+    if (actual.archivoUrl) {
+      orig.appendChild(el('a', { class: 'btn sec', href: actual.archivoUrl, target: '_blank', rel: 'noopener noreferrer',
+                                 text: 'Abrir en Google Drive ↗' }));
+    }
+    if (!actual.descargable && !actual.archivoUrl) {
+      orig.appendChild(el('span', { class: 'hint', text: 'Este archivo es muy grande para abrirlo aquí. Pide acceso en Google Drive a la organización.' }));
+    }
 
     var abierta = datos.congreso.evaluacionAbierta;
     var previos = (actual.evaluacion && actual.evaluacion.valores) || {};
@@ -125,7 +139,45 @@
     window.scrollTo(0, 0);
   }
 
-  $('volver').addEventListener('click', function () { cargarLista(); });
+  // Trae el archivo completo. Los PDF se muestran dentro del panel; los demás se descargan.
+  var urlArchivo = null;
+  async function abrirArchivo(boton, esPdf) {
+    var texto = boton.textContent;
+    boton.disabled = true;
+    boton.textContent = 'Cargando…';
+    try {
+      var r = await api('archivo', { clave: CLAVE, codigo: actual.codigo });
+      var bin = atob(r.base64);
+      var bytes = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      if (urlArchivo) URL.revokeObjectURL(urlArchivo);
+      urlArchivo = URL.createObjectURL(new Blob([bytes], { type: r.mime }));
+      var descarga = el('a', { class: 'btn sec', href: urlArchivo, download: r.nombre, text: 'Descargar' });
+
+      if (esPdf) {
+        var vista = $('d-vista');
+        vista.innerHTML = '';
+        vista.classList.add('con-lector');
+        vista.appendChild(el('iframe', { class: 'lector', src: urlArchivo, title: 'Artículo ' + actual.codigo }));
+        boton.replaceWith(descarga);
+      } else {
+        descarga.click();
+        boton.disabled = false;
+        boton.textContent = texto;
+      }
+    } catch (e) {
+      boton.disabled = false;
+      boton.textContent = texto;
+      $('d-error').textContent = e.message;
+      $('d-error').hidden = false;
+    }
+  }
+
+  $('volver').addEventListener('click', function () {
+    if (urlArchivo) { URL.revokeObjectURL(urlArchivo); urlArchivo = null; }
+    $('d-vista').classList.remove('con-lector');
+    cargarLista();
+  });
 
   $('form').addEventListener('submit', async function (ev) {
     ev.preventDefault();
