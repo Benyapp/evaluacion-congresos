@@ -205,7 +205,7 @@ function pintarPlazo(nodo, clave, iso, zona) {
   var fecha;
   try {
     fecha = new Intl.DateTimeFormat(IDIOMA === 'en' ? 'en-US' : 'es-CL',
-      { dateStyle: 'long', timeStyle: 'short', timeZone: zona || undefined, timeZoneName: undefined }).format(cierre);
+      { dateStyle: 'long', timeStyle: 'short', timeZone: zona || undefined, hour12: IDIOMA === 'en' }).format(cierre);
     var sigla = new Intl.DateTimeFormat('en-US', { timeZone: zona || undefined, timeZoneName: 'short' })
       .formatToParts(cierre).filter(function (p) { return p.type === 'timeZoneName'; })[0];
     if (sigla) fecha += ' (' + sigla.value + ')';
