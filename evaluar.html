@@ -15,15 +15,19 @@
 <body>
   <header class="top">
     <div class="logo" data-inicial aria-hidden="true"></div>
-    <div class="marca"><span data-marca></span><small>Panel de evaluación</small></div>
+    <div class="marca"><span data-marca></span><small data-t="sub_panel"></small></div>
+    <div class="idioma" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="es" lang="es" title="Español">ES</button>
+      <button type="button" data-lang="en" lang="en" title="English">EN</button>
+    </div>
   </header>
 
   <main>
-    <div id="cargando" class="cargando"><div class="spinner"></div> Cargando…</div>
+    <div id="cargando" class="cargando"><div class="spinner"></div> <span data-t="cargando"></span></div>
     <div id="error-general" class="card" hidden>
-      <h1>No pudimos abrir el panel</h1>
+      <h1 data-t="e_panel_titulo"></h1>
       <p class="msg err" id="error-general-texto"></p>
-      <p class="hint">Usa el enlace personal que te llegó por email. Si el problema sigue, avísale a la organización.</p>
+      <p class="hint" data-t="e_panel_hint"></p>
     </div>
 
     <section id="vista-lista" hidden>
@@ -43,7 +47,7 @@
     </section>
 
     <section id="vista-detalle" hidden>
-      <button class="enlace-btn volver" id="volver" type="button">&larr; Volver a la lista</button>
+      <button class="enlace-btn volver" id="volver" type="button" data-t="volver"></button>
       <div class="card">
         <div class="etiqueta" id="d-codigo"></div>
         <h2 id="d-titulo"></h2>
@@ -54,19 +58,20 @@
         <form id="form" novalidate>
           <div id="criterios"></div>
           <div class="campo">
-            <label for="comentario">Comentario <span class="hint">(opcional)</span></label>
+            <label for="comentario"><span data-t="comentario"></span> <span class="hint" data-t="opcional"></span></label>
             <textarea id="comentario" maxlength="2000"></textarea>
           </div>
           <div class="msg err" id="d-error" role="alert" hidden></div>
-          <button type="submit" class="btn bloque" id="guardar">Guardar evaluación</button>
+          <button type="submit" class="btn bloque" id="guardar"></button>
         </form>
       </div>
     </section>
   </main>
 
-  <footer class="pie">Este enlace es personal. No lo compartas.</footer>
+  <footer class="pie" data-t="pie_panel"></footer>
 
   <script src="config.js"></script>
+  <script src="i18n.js"></script>
   <script src="api.js"></script>
   <script src="evaluar.js"></script>
 </body>

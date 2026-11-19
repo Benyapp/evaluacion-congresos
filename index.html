@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://script.google.com https://script.googleusercontent.com; img-src 'self' data:; base-uri 'none'; form-action 'none'">
   <meta name="referrer" content="no-referrer">
-  <title>Envío de artículos</title>
+  <title>Envío de artículos · Article submission</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,33 +14,37 @@
 <body>
   <header class="top">
     <div class="logo" data-inicial aria-hidden="true"></div>
-    <div class="marca"><span data-marca></span><small>Envío de artículos</small></div>
+    <div class="marca"><span data-marca></span><small data-t="sub_envio"></small></div>
+    <div class="idioma" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="es" lang="es" title="Español">ES</button>
+      <button type="button" data-lang="en" lang="en" title="English">EN</button>
+    </div>
   </header>
 
   <main class="angosto">
     <div class="card">
-      <div id="cargando" class="cargando"><div class="spinner"></div> Cargando…</div>
+      <div id="cargando" class="cargando"><div class="spinner"></div> <span data-t="cargando"></span></div>
       <div id="error-inicial" hidden>
-        <h1>No pudimos abrir el formulario</h1>
+        <h1 data-t="e_form_titulo"></h1>
         <p class="msg err" id="error-inicial-texto"></p>
-        <p class="hint">Revisa que el enlace sea el que te entregó la organización.</p>
+        <p class="hint" data-t="e_form_hint"></p>
       </div>
 
       <form id="form" hidden novalidate>
         <div class="etiqueta" id="congreso-codigo"></div>
         <h1 id="congreso-nombre"></h1>
-        <p class="sub">Completa tus datos y sube el archivo de tu artículo. Recibirás una confirmación por email.</p>
+        <p class="sub" data-t="intro"></p>
 
         <div class="campo">
-          <label for="nombre">Nombre o empresa</label>
+          <label for="nombre" data-t="nombre"></label>
           <input type="text" id="nombre" maxlength="120" required autocomplete="organization">
         </div>
         <div class="campo">
-          <label for="email">Email de contacto</label>
+          <label for="email" data-t="email"></label>
           <input type="email" id="email" maxlength="160" required autocomplete="email" inputmode="email">
         </div>
         <div class="campo">
-          <label for="titulo">Título del artículo</label>
+          <label for="titulo" data-t="titulo"></label>
           <input type="text" id="titulo" maxlength="200" required>
         </div>
 
@@ -51,24 +55,21 @@
         </div>
 
         <div class="campo">
-          <span class="label" id="archivo-label">Archivo del artículo</span>
+          <span class="label" id="archivo-label" data-t="archivo"></span>
           <div class="zona" id="zona">
             <input type="file" id="archivo" aria-labelledby="archivo-label" required>
             <svg class="icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 16V4M7 9l5-5 5 5"/><path d="M20 16v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2"/>
             </svg>
-            <div id="zona-texto">
-              <div class="principal">Arrastra tu archivo aquí o haz clic para elegirlo</div>
-              <div class="hint" id="formatos"></div>
-            </div>
+            <div id="zona-texto"></div>
           </div>
         </div>
 
-        <button class="btn bloque" type="submit" id="enviar">Enviar artículo</button>
+        <button class="btn bloque" type="submit" id="enviar" data-t="enviar"></button>
 
         <div class="progreso" id="progreso" hidden>
           <div class="barra"><div id="barra"></div></div>
-          <div class="estado"><span id="estado">Preparando…</span><span id="porcentaje"></span></div>
+          <div class="estado"><span id="estado"></span><span id="porcentaje"></span></div>
         </div>
         <div class="msg err" id="error" role="alert" hidden></div>
       </form>
@@ -77,18 +78,19 @@
         <div class="check" aria-hidden="true">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
         </div>
-        <h1>¡Artículo recibido!</h1>
-        <p class="sub">Tu código de envío es</p>
+        <h1 data-t="exito_titulo"></h1>
+        <p class="sub" data-t="exito_codigo"></p>
         <div class="codigo" id="codigo"></div>
-        <p class="sub">Te enviamos una confirmación a <b id="exito-email"></b>.<br>Guarda este código para cualquier consulta.</p>
-        <button class="btn sec" type="button" id="otro">Enviar otro artículo</button>
+        <p class="sub"><span data-t="exito_email"></span> <b id="exito-email"></b>.<br><span data-t="exito_guarda"></span></p>
+        <button class="btn sec" type="button" id="otro" data-t="otro"></button>
       </div>
     </div>
   </main>
 
-  <footer class="pie">Tus archivos se guardan de forma privada y solo los ve el comité evaluador.</footer>
+  <footer class="pie" data-t="pie_envio"></footer>
 
   <script src="config.js"></script>
+  <script src="i18n.js"></script>
   <script src="api.js"></script>
   <script src="envio.js"></script>
 </body>
