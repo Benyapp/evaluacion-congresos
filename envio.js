@@ -32,15 +32,6 @@
     $('estado').textContent = t(clave, vars);
   }
 
-  function leerBase64(blob) {
-    return new Promise(function (ok, mal) {
-      var r = new FileReader();
-      r.onload = function () { ok(String(r.result).split(',')[1] || ''); };
-      r.onerror = function () { mal(new Error(t('e_lectura'))); };
-      r.readAsDataURL(blob);
-    });
-  }
-
   function extension(nombre) { return (nombre.split('.').pop() || '').toLowerCase(); }
   function listaFormatos() { return CONFIG.formatos.join(', ').toUpperCase(); }
 
@@ -142,28 +133,13 @@
 
     try {
       var sesion = await api('iniciarSubida', { datos: datos });
-      var parte = sesion.tamanoParte;
-      var inicio = 0, completo = false;
-
-      while (!completo) {
-        var base64 = await leerBase64(archivo.slice(inicio, Math.min(inicio + parte, archivo.size)));
-        var resp = null;
-        for (var intento = 1; intento <= 3 && !resp; intento++) {
-          try {
-            resp = await api('subirParte', { id: sesion.id, inicio: inicio, base64: base64 });
-          } catch (e) {
-            if (intento === 3) throw e;
-            estado('reintentando');
-            await new Promise(function (r) { setTimeout(r, 2000 * intento); });
-          }
+      await subirPorPartes(sesion, archivo, function (clave, vars, pct) {
+        estado(clave, vars);
+        if (pct !== null) {
+          $('barra').style.width = pct + '%';
+          $('porcentaje').textContent = pct + '%';
         }
-        completo = !!resp.completo;
-        inicio = completo ? archivo.size : resp.siguiente;
-        var pct = Math.round(inicio / archivo.size * 100);
-        $('barra').style.width = pct + '%';
-        $('porcentaje').textContent = pct + '%';
-        estado('subiendo', { a: mb(inicio), b: mb(archivo.size) });
-      }
+      });
 
       estado('registrando');
       var fin = await api('finalizarEnvio', { id: sesion.id });

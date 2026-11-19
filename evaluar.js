@@ -97,8 +97,11 @@
           el('div', { class: 'tit', text: x.titulo }),
           meta ? el('div', { class: 'meta', text: meta }) : null
         ]),
-        x.nota === null ? el('span', { class: 'chip pend', text: t('pendiente') })
-                        : el('span', { class: 'chip ok', text: t('nota', { n: num(x.nota) }) })
+        el('div', { class: 'chips' }, [
+          x.actualizado ? el('span', { class: 'chip pend', text: t('actualizado') }) : null,
+          x.nota === null ? el('span', { class: 'chip pend', text: t('pendiente') })
+                          : el('span', { class: 'chip ok', text: t('nota', { n: num(x.nota) }) })
+        ])
       ]);
       b.addEventListener('click', function () { abrir(x.codigo); });
       lista.appendChild(b);
@@ -161,6 +164,9 @@
     var aviso = $('d-aviso');
     aviso.innerHTML = '';
     if (avisoDetalle) aviso.appendChild(el('div', { class: 'msg ok', role: 'status', text: t(avisoDetalle.clave, avisoDetalle.vars) }));
+    if (actual.evaluacion && actual.evaluacion.actualizado) {
+      aviso.appendChild(el('div', { class: 'msg warn', text: t('actualizado_aviso', { v: actual.version }) }));
+    }
     var pend = pendientesLista();
     var idx = pend.map(function (x) { return x.codigo; }).indexOf(actual.codigo);
     $('d-posicion').textContent = idx >= 0 ? t('posicion', { a: idx + 1, b: pend.length }) : '';

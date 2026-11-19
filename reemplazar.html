@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://script.google.com https://script.googleusercontent.com; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Nueva versión · New version</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20261119e">
+</head>
+<body>
+  <header class="top">
+    <div class="logo" data-inicial aria-hidden="true"></div>
+    <div class="marca"><span data-marca></span><small data-t="sub_reemplazo"></small></div>
+    <div class="idioma" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="es" lang="es" title="Español">ES</button>
+      <button type="button" data-lang="en" lang="en" title="English">EN</button>
+    </div>
+  </header>
+
+  <main class="angosto">
+    <div class="card">
+      <div id="cargando" class="cargando"><div class="spinner"></div> <span data-t="cargando"></span></div>
+      <div id="error-inicial" hidden>
+        <h1 data-t="e_reemplazo_titulo"></h1>
+        <p class="msg err" id="error-inicial-texto"></p>
+        <p class="hint" data-t="e_reemplazo_hint"></p>
+      </div>
+
+      <form id="form" hidden novalidate>
+        <div class="etiqueta" id="r-codigo"></div>
+        <h1 data-t="titulo_reemplazo"></h1>
+        <p class="sub" id="r-congreso"></p>
+        <p class="plazo" id="plazo" hidden></p>
+
+        <div class="version-actual">
+          <div><b id="r-titulo"></b></div>
+          <div id="r-actual"></div>
+          <div class="hint" id="r-restan"></div>
+        </div>
+        <p class="hint" data-t="reemplazo_intro"></p>
+
+        <div class="campo">
+          <span class="label" id="archivo-label" data-t="archivo"></span>
+          <div class="zona" id="zona">
+            <input type="file" id="archivo" aria-labelledby="archivo-label" required>
+            <svg class="icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 16V4M7 9l5-5 5 5"/><path d="M20 16v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2"/>
+            </svg>
+            <div id="zona-texto"></div>
+          </div>
+        </div>
+
+        <button class="btn bloque" type="submit" id="enviar" data-t="subir_version"></button>
+
+        <div class="progreso" id="progreso" hidden>
+          <div class="barra"><div id="barra"></div></div>
+          <div class="estado"><span id="estado"></span><span id="porcentaje"></span></div>
+        </div>
+        <div class="msg err" id="error" role="alert" hidden></div>
+      </form>
+
+      <div id="exito" class="exito" hidden>
+        <div class="check" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </div>
+        <h1 data-t="reemplazo_ok"></h1>
+        <p class="sub" data-t="reemplazo_ok_sub"></p>
+        <div class="codigo" id="r-version-nueva"></div>
+        <p class="sub" data-t="reemplazo_ok_email"></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="pie" data-t="pie_envio"></footer>
+
+  <script src="config.js?v=20261119e"></script>
+  <script src="i18n.js?v=20261119e"></script>
+  <script src="api.js?v=20261119e"></script>
+  <script src="subida.js?v=20261119e"></script>
+  <script src="reemplazo.js?v=20261119e"></script>
+</body>
+</html>
