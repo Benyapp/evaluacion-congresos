@@ -13,6 +13,10 @@
   var errorDetalle = null;   // { clave, vars } o { texto }
   var errorPanel = null;     // { clave } o { texto }
   var urlArchivo = null, nombreArchivo = '', lectorAbierto = false;
+  var filtro = 'todos';      // todos | pendientes | evaluados
+  var avisoDetalle = null;   // { clave, vars } mensaje sobre el artículo abierto
+
+  function pendientesLista() { return datos.envios.filter(function (x) { return x.nota === null; }); }
 
   function mostrar(vista) {
     vistaActual = vista;
@@ -72,10 +76,20 @@
     if (!datos.criterios.length) avisos.appendChild(el('div', { class: 'msg warn', text: t('sin_criterios') }));
     if (avisos.childNodes.length) avisos.appendChild(el('div', { class: 'campo' }));
 
+    document.querySelectorAll('#filtros button').forEach(function (b) {
+      b.classList.toggle('activo', b.getAttribute('data-filtro') === filtro);
+      b.setAttribute('aria-pressed', b.getAttribute('data-filtro') === filtro ? 'true' : 'false');
+    });
+    $('filtros').hidden = !datos.envios.length;
+    var visibles = datos.envios.filter(function (x) {
+      return filtro === 'todos' || (filtro === 'pendientes' ? x.nota === null : x.nota !== null);
+    });
+
     var lista = $('lista');
     lista.innerHTML = '';
     if (!datos.envios.length) lista.appendChild(el('div', { class: 'card', text: t('sin_articulos') }));
-    datos.envios.forEach(function (x) {
+    else if (!visibles.length) lista.appendChild(el('div', { class: 'card', text: t('sin_filtro') }));
+    visibles.forEach(function (x) {
       var meta = [x.autor, x.fecha].filter(String).join(' · ');
       var b = el('button', { class: 'item', type: 'button' }, [
         el('div', {}, [
@@ -91,11 +105,16 @@
     });
   }
 
+  document.querySelectorAll('#filtros button').forEach(function (b) {
+    b.addEventListener('click', function () { filtro = b.getAttribute('data-filtro'); pintarLista(); });
+  });
+
   // --- Detalle ------------------------------------------------------------
-  async function abrir(codigo) {
+  async function abrir(codigo, aviso) {
     mostrar('cargando');
     try { actual = await api('detalle', { clave: CLAVE, codigo: codigo }); } catch (e) { return errorGeneral({ texto: e.message }); }
 
+    avisoDetalle = aviso || null;
     cerrarArchivo();
     ocultarErrorDetalle();
     $('comentario').value = actual.evaluacion ? actual.evaluacion.comentario : '';
@@ -139,6 +158,13 @@
 
   // Dibuja el detalle con los valores indicados (los guardados o los que el evaluador ya marcó).
   function pintarDetalle(valores) {
+    var aviso = $('d-aviso');
+    aviso.innerHTML = '';
+    if (avisoDetalle) aviso.appendChild(el('div', { class: 'msg ok', role: 'status', text: t(avisoDetalle.clave, avisoDetalle.vars) }));
+    var pend = pendientesLista();
+    var idx = pend.map(function (x) { return x.codigo; }).indexOf(actual.codigo);
+    $('d-posicion').textContent = idx >= 0 ? t('posicion', { a: idx + 1, b: pend.length }) : '';
+
     $('d-codigo').textContent = actual.codigo;
     $('d-titulo').textContent = actual.titulo;
     $('d-meta').textContent = [actual.autor, actual.formato + ' · ' + num(actual.tamano) + ' MB'].filter(String).join(' · ');
@@ -181,8 +207,17 @@
     $('comentario').disabled = !abierta;
     $('guardar').hidden = !abierta || !datos.criterios.length;
     $('guardar').disabled = false;
-    $('guardar').textContent = actual.evaluacion ? t('actualizar') : t('guardar');
+    $('guardar').textContent = textoGuardar();
     if (errorDetalle && errorDetalle.clave) $('d-error').textContent = t(errorDetalle.clave, errorDetalle.vars);
+  }
+
+  // Si quedan otros pendientes, el botón ofrece pasar directo al siguiente.
+  function siguientePendiente() {
+    return pendientesLista().filter(function (x) { return x.codigo !== actual.codigo; })[0] || null;
+  }
+  function textoGuardar() {
+    if (siguientePendiente()) return t('guardar_sig');
+    return actual.evaluacion ? t('actualizar') : t('guardar');
   }
 
   // Lee lo que el evaluador marcó en pantalla (para guardar o para no perderlo al cambiar de idioma).
@@ -255,11 +290,19 @@
     try {
       var r = await api('evaluar', { clave: CLAVE, codigo: actual.codigo, valores: valores, comentario: $('comentario').value });
       cerrarArchivo();
-      cargarLista({ clave: 'guardado', vars: { c: actual.codigo, n: num(r.nota) } });
+      var guardadoVars = { c: actual.codigo, n: num(r.nota) };
+      // Se actualiza la lista y se abre el siguiente pendiente, si queda alguno.
+      try { datos = await api('panel', { clave: CLAVE }); } catch (e) { return cargarLista({ clave: 'guardado', vars: guardadoVars }); }
+      var siguiente = pendientesLista()[0];
+      if (siguiente) return abrir(siguiente.codigo, { clave: 'guardado_sig', vars: guardadoVars });
+      mensajeLista = { clave: 'terminaste' };
+      pintarLista();
+      mostrar('lista');
+      window.scrollTo(0, 0);
     } catch (e) {
       mostrarErrorDetalle({ texto: e.message });
       $('guardar').disabled = false;
-      $('guardar').textContent = actual.evaluacion ? t('actualizar') : t('guardar');
+      $('guardar').textContent = textoGuardar();
     }
   });
 

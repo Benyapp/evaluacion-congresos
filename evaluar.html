@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261119c">
+  <link rel="stylesheet" href="styles.css?v=20261119d">
 </head>
 <body>
   <header class="top">
@@ -44,11 +44,20 @@
         </div>
       </div>
       <div id="avisos"></div>
+      <div class="filtros" role="group" id="filtros">
+        <button type="button" data-filtro="todos" data-t="f_todos"></button>
+        <button type="button" data-filtro="pendientes" data-t="f_pendientes"></button>
+        <button type="button" data-filtro="evaluados" data-t="f_evaluados"></button>
+      </div>
       <div id="lista" class="lista"></div>
     </section>
 
     <section id="vista-detalle" hidden>
-      <button class="enlace-btn volver" id="volver" type="button" data-t="volver"></button>
+      <div class="barra-detalle">
+        <button class="enlace-btn" id="volver" type="button" data-t="volver"></button>
+        <span class="hint" id="d-posicion"></span>
+      </div>
+      <div id="d-aviso"></div>
       <div class="card">
         <div class="etiqueta" id="d-codigo"></div>
         <h2 id="d-titulo"></h2>
@@ -71,9 +80,9 @@
 
   <footer class="pie" data-t="pie_panel"></footer>
 
-  <script src="config.js?v=20261119c"></script>
-  <script src="i18n.js?v=20261119c"></script>
-  <script src="api.js?v=20261119c"></script>
-  <script src="evaluar.js?v=20261119c"></script>
+  <script src="config.js?v=20261119d"></script>
+  <script src="i18n.js?v=20261119d"></script>
+  <script src="api.js?v=20261119d"></script>
+  <script src="evaluar.js?v=20261119d"></script>
 </body>
 </html>
