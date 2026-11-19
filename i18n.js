@@ -175,6 +175,16 @@ var TEXTOS = {
   }
 };
 
+// Si algo falla al cargar, en vez de quedarse en "Cargando…" se muestra un aviso para recargar.
+window.addEventListener('error', function () {
+  var cargando = document.getElementById('cargando');
+  if (cargando && !cargando.hidden) {
+    cargando.textContent = (IDIOMA === 'en')
+      ? 'The page could not load. Please reload it (Ctrl+F5).'
+      : 'No se pudo cargar la página. Recárgala (Ctrl+F5).';
+  }
+});
+
 var IDIOMA = (function () {
   var param = new URLSearchParams(location.search).get('lang');
   if (param === 'en' || param === 'es') return param;
