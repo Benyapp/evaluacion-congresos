@@ -60,6 +60,8 @@
     $('congreso').textContent = nombreCongreso;
     $('bienvenida').textContent = t(pendientes === 0 ? 'hola_0' : pendientes === 1 ? 'hola_1' : 'hola_n',
                                     { n: datos.evaluador, p: pendientes });
+    if (datos.congreso.evaluacionAbierta) pintarPlazo($('plazo'), 'plazo_eval', datos.congreso.cierre, datos.congreso.zona);
+    else $('plazo').hidden = true;
     $('avance-texto').textContent = t('avance', { a: hechos, b: datos.envios.length });
     $('avance-barra').style.width = (datos.envios.length ? hechos / datos.envios.length * 100 : 0) + '%';
 

@@ -68,6 +68,10 @@ a { color: var(--accent); }
 .marca small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; line-height: 1.2; }
 main { max-width: 820px; width: 100%; margin: 0 auto; padding: 24px 16px 48px; flex: 1; }
 main.angosto { max-width: 600px; }
+.plazo { display: inline-flex; align-items: center; gap: 8px; margin: 12px 0 0; padding: 6px 12px; border-radius: 99px;
+         background: var(--accent-soft); color: var(--accent); font-size: .85rem; font-weight: 600; }
+.plazo::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.plazo.urgente { background: var(--warn-soft); color: var(--warn); }
 .idioma { margin-left: auto; display: inline-flex; border: 1px solid var(--line); border-radius: 99px; padding: 3px;
           background: var(--surface); }
 .idioma button { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: .8rem; font-weight: 600;

@@ -65,6 +65,7 @@
     var nombre = segunIdioma(CONFIG.nombre, CONFIG.nombreEn);
     document.title = t('titulo_envio_c', { c: nombre });
     $('congreso-nombre').textContent = nombre;
+    pintarPlazo($('plazo'), 'plazo_envio', CONFIG.cierre, CONFIG.zona);
     pintarZona();
     if (estadoActual) $('estado').textContent = t(estadoActual.clave, estadoActual.vars);
     if (errorActual && errorActual.clave) $('error').textContent = t(errorActual.clave, errorActual.vars);

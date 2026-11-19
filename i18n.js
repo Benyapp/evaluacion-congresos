@@ -80,7 +80,14 @@ var TEXTOS = {
     guardando: 'Guardando…',
     falta: 'Falta puntuar "{c}".',
     guardado: 'Evaluación de {c} guardada. Nota: {n} de 10.',
-    pie_panel: 'Este enlace es personal. No lo compartas.'
+    pie_panel: 'Este enlace es personal. No lo compartas.',
+    plazo_envio: 'Recibimos artículos hasta el {f}',
+    plazo_eval: 'Puedes evaluar hasta el {f}',
+    quedan_d: 'quedan {n} días',
+    quedan_1d: 'queda 1 día',
+    quedan_h: 'quedan {n} horas',
+    quedan_1h: 'queda 1 hora',
+    quedan_m: 'queda menos de una hora'
   },
   en: {
     marca: 'Conference articles',
@@ -157,7 +164,14 @@ var TEXTOS = {
     guardando: 'Saving…',
     falta: 'Please score "{c}".',
     guardado: 'Review of {c} saved. Score: {n} out of 10.',
-    pie_panel: 'This link is personal. Please do not share it.'
+    pie_panel: 'This link is personal. Please do not share it.',
+    plazo_envio: 'Submissions accepted until {f}',
+    plazo_eval: 'Reviews accepted until {f}',
+    quedan_d: '{n} days left',
+    quedan_1d: '1 day left',
+    quedan_h: '{n} hours left',
+    quedan_1h: '1 hour left',
+    quedan_m: 'less than an hour left'
   }
 };
 
@@ -182,6 +196,32 @@ function num(n) { return IDIOMA === 'en' ? String(n) : String(n).replace('.', ',
 
 // Elige el texto en el idioma actual, con el español como respaldo.
 function segunIdioma(es, en) { return IDIOMA === 'en' && en ? en : es; }
+
+// Muestra una fecha de cierre ("Recibimos artículos hasta el 30 de noviembre de 2026, 23:59 · quedan 3 días").
+// La hora se muestra en la zona horaria del congreso, con su sigla (ej. GMT-3).
+function pintarPlazo(nodo, clave, iso, zona) {
+  if (!iso) { nodo.hidden = true; return; }
+  var cierre = new Date(iso);
+  var fecha;
+  try {
+    fecha = new Intl.DateTimeFormat(IDIOMA === 'en' ? 'en-US' : 'es-CL',
+      { dateStyle: 'long', timeStyle: 'short', timeZone: zona || undefined, timeZoneName: undefined }).format(cierre);
+    var sigla = new Intl.DateTimeFormat('en-US', { timeZone: zona || undefined, timeZoneName: 'short' })
+      .formatToParts(cierre).filter(function (p) { return p.type === 'timeZoneName'; })[0];
+    if (sigla) fecha += ' (' + sigla.value + ')';
+  } catch (e) {
+    fecha = cierre.toLocaleString();
+  }
+  var horas = (cierre.getTime() - Date.now()) / 3600000;
+  var resta = horas >= 48 ? t('quedan_d', { n: Math.floor(horas / 24) })
+            : horas >= 24 ? t('quedan_1d')
+            : horas >= 2 ? t('quedan_h', { n: Math.floor(horas) })
+            : horas >= 1 ? t('quedan_1h')
+            : t('quedan_m');
+  nodo.textContent = t(clave, { f: fecha }) + ' · ' + resta;
+  nodo.classList.toggle('urgente', horas < 72);
+  nodo.hidden = horas <= 0;
+}
 
 var alCambiarIdioma = [];
 
